@@ -16,12 +16,12 @@ Gọi `call_openai` với temperature 0.0, 0.7, 1.2 và 1.8 dùng prompt
 
 **Bạn nhận thấy quy luật gì qua bốn phản hồi? Ở mức nào phản hồi bắt đầu
 kém mạch lạc?** (2–3 câu)
-> *Câu trả lời của bạn*
+> Khi temperature tăng từ 0.0 lên 1.8, độ ngẫu nhiên và biến thiên của từ ngữ tăng dần. Ở mức 0.0 và 0.7, câu trả lời rất mạch lạc, chuẩn xác và đi thẳng vào sự thật; từ 1.2 trở đi văn phong bắt đầu tự do hơn, và đến 1.8 phản hồi bắt đầu kém mạch lạc, dễ xuất hiện cấu trúc câu bất thường hoặc lan man.
 
 ### Câu 1.2 — Chọn temperature cho sản phẩm
 **Bạn sẽ đặt temperature bao nhiêu cho trợ lý soạn thảo hợp đồng pháp lý,
 và bao nhiêu cho trợ lý viết slogan quảng cáo? Giải thích khác biệt.**
-> *Câu trả lời của bạn*
+> Tôi sẽ đặt temperature = 0.0 (hoặc tối đa 0.2) cho trợ lý hợp đồng pháp lý để đảm bảo tính chính xác tuyệt đối, nhất quán và tránh hiện tượng tưởng tượng (hallucination). Ngược lại, với trợ lý viết slogan quảng cáo, tôi chọn temperature = 0.8 - 1.0 để kích thích sự sáng tạo và tạo ra nhiều ý tưởng độc đáo, mới mẻ.
 
 ### Câu 1.3 — Đánh đổi chi phí
 Kịch bản: 20.000 người dùng hoạt động mỗi ngày, mỗi người gọi API 2 lần,
@@ -30,7 +30,7 @@ mỗi lần trung bình ~500 token đầu ra.
 **Ước tính chi phí mỗi ngày của model lớn so với model nhỏ cho workload này
 (dựa trên bảng giá trong template). Nêu một trường hợp model lớn xứng đáng
 với chi phí và một trường hợp model nhỏ là lựa chọn đúng:**
-> *Câu trả lời của bạn*
+> Chi phí output/ngày: 20.000 x 2 x 500 = 20.000K token. Model lớn (gpt-4o, $0.010/1K) tốn 200 USD/ngày, model nhỏ (gpt-4o-mini, $0.0006/1K) tốn 12 USD/ngày (rẻ hơn 16.6 lần). Model lớn xứng đáng khi làm các tác vụ phức tạp như viết code, phân tích hợp đồng pháp lý hay chẩn đoán y tế. Model nhỏ là lựa chọn đúng cho tác vụ đơn giản như phân loại spam, phân tích cảm xúc hoặc chatbot trả lời FAQ.
 
 ---
 
@@ -46,7 +46,7 @@ khác nhau:
 **Hai phản hồi khác nhau như thế nào (giọng văn, độ dài, mức kỹ thuật)?
 Từ đó rút ra system prompt điều khiển được những khía cạnh nào của phản hồi?**
 (3–4 câu)
-> *Câu trả lời của bạn*
+> Persona nhà thơ trả lời bằng giọng văn bay bổng, dùng hình ảnh ẩn dụ (như đứa trẻ tập đi) và hoàn toàn không dùng từ chuyên ngành. Persona kỹ sư senior trả lời ngắn gọn, chuẩn xác với thuật ngữ chuyên môn (algorithm, dataset, model weights) và kèm code Python minh họa. Qua đó, system prompt điều khiển được giọng văn (tone), độ sâu kỹ thuật (technical level), cấu trúc định dạng (format) và phong cách dùng từ của phản hồi.
 
 ### Câu 2.2 — tiktoken vs đếm từ
 Chọn một đoạn văn tiếng Việt ~150 từ. So sánh số token theo `count_tokens`
@@ -55,7 +55,7 @@ Chọn một đoạn văn tiếng Việt ~150 từ. So sánh số token theo `co
 **Hai con số chênh nhau bao nhiêu phần trăm? Nếu dùng ước lượng thô để dự
 toán ngân sách API cho ứng dụng tiếng Việt, bạn sẽ dự toán thiếu hay thừa —
 và vì sao?**
-> *Câu trả lời của bạn*
+> Số token thực tế đếm bằng tiktoken cao hơn khoảng 30% - 50% so với công thức ước lượng thô (số từ / 0.75 vốn tối ưu cho tiếng Anh) vì tiktoken phải tách các từ ghép và dấu tiếng Việt thành nhiều subword token. Do đó, nếu dùng ước lượng thô cho ứng dụng tiếng Việt, bạn sẽ bị dự toán **thiếu** ngân sách API thực tế.
 
 ---
 
@@ -65,13 +65,13 @@ và vì sao?**
 **Xét ba ứng dụng: (a) chatbot văn bản, (b) trợ lý giọng nói đọc to phản hồi,
 (c) pipeline dịch tài liệu chạy ngầm ban đêm. Ứng dụng nào hưởng lợi nhiều
 nhất từ streaming, ứng dụng nào không cần — và tại sao?** (1 đoạn văn)
-> *Câu trả lời của bạn*
+> (a) Chatbot văn bản hưởng lợi nhiều nhất từ streaming vì giảm thời gian chờ đợi nhận thức (perceived latency), giúp người dùng thấy câu trả lời xuất hiện ngay lập tức từng chữ. (b) Trợ lý giọng nói đọc to chỉ cần stream theo từng câu hoàn chỉnh để chuyển thành âm thanh. (c) Pipeline dịch tài liệu chạy ngầm ban đêm hoàn toàn không cần streaming vì đây là tác vụ xử lý lô bất đồng bộ (batch job), người dùng chỉ quan tâm đến kết quả file hoàn chỉnh khi hoàn tất.
 
 ### Câu 3.2 — Vì sao backoff theo cấp số nhân?
 **Khi API quá tải và hàng nghìn client cùng retry, exponential backoff giúp
 gì so với delay cố định? Tra cứu thêm: kỹ thuật "jitter" (thêm độ trễ ngẫu
 nhiên) giải quyết vấn đề gì còn sót lại?**
-> *Câu trả lời của bạn*
+> Exponential backoff giúp giãn rộng khoảng thời gian giữa các lần thử lại, tránh tạo thêm tải dồn dập lên server đang gặp sự cố. Kỹ thuật "jitter" (thêm độ trễ ngẫu nhiên) giải quyết vấn đề "Thundering Herd" (bầy đàn cùng lúc), ngăn các client thử lại chính xác cùng một thời điểm sau delay, tránh làm dội sóng request làm sập lại server vừa khôi phục.
 
 ---
 
@@ -81,13 +81,16 @@ nhiên) giải quyết vấn đề gì còn sót lại?**
 **Viết lại system prompt bạn dùng cho trợ lý của mình. Chỉ ra 2 chỗ trong
 prompt mà nếu xóa đi, hành vi trợ lý sẽ thay đổi rõ rệt — và mô tả thay đổi
 đó:**
-> *Câu trả lời của bạn*
+> System prompt: "Bạn là một trợ giảng AI thân thiện, trả lời ngắn gọn dưới 3 câu và luôn giải thích bằng tiếng Việt." 
+> 1. Xóa "ngắn gọn dưới 3 câu": Trợ lý sẽ trả lời dài dòng, chi tiết và tiêu tốn nhiều token hơn.
+> 2. Xóa "luôn giải thích bằng tiếng Việt": Khi người dùng hỏi bằng tiếng Anh, trợ lý sẽ phản hồi lại bằng tiếng Anh thay vì giữ đúng ngôn ngữ tiếng Việt theo yêu cầu.
 
 ### Câu 4.2 — Hạn chế & cải thiện
 **Trợ lý của bạn giữ history 4 lượt cuối. Hãy mô tả một tình huống hội thoại
 cụ thể mà giới hạn này khiến trợ lý trả lời sai/mất ngữ cảnh, và đề xuất một
 cách khắc phục (ví dụ: tóm tắt các lượt cũ, tăng giới hạn có chọn lọc...):**
-> *Câu trả lời của bạn*
+> Tình huống: Ở lượt 1, người dùng giới thiệu "Tôi tên là An và đang học ngành CNTT". Sau 5 lượt hội thoại thảo luận về các chủ đề khác, đến lượt 7 người dùng hỏi "Ngành học của tôi là gì?". Trợ lý sẽ không biết vì lượt 1 đã bị cắt khỏi history (chỉ giữ 4 lượt = 8 tin nhắn gần nhất).
+> Cách khắc phục: Sử dụng cơ chế Conversation Summary Memory — dùng LLM tóm tắt lại các lượt hội thoại cũ trước khi bị xóa và đính kèm đoạn tóm tắt này vào đầu history để duy trì ngữ cảnh quan trọng xuyên suốt.
 
 ---
 
